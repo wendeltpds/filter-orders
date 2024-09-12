@@ -7,7 +7,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from './ui/badge';
-import { ChevronsUpDown, Currency } from 'lucide-react';
+import { ChevronsUpDown, Currency, Divide } from 'lucide-react';
 import { Order } from '@/lib/types';
 
 const format = new Intl.NumberFormat('pt-br', {
@@ -35,7 +35,6 @@ export default function OrdersTable({orders}: {orders: Order[]}) {
         </TableRow>
       </TableHeader>
       <TableBody>
-
       {orders.map((order) => (
           <TableRow key={order.id}>
             <TableCell>
@@ -53,21 +52,7 @@ export default function OrdersTable({orders}: {orders: Order[]}) {
             <TableCell className="text-right">{format.format(order.amount_in_cents/100)}</TableCell>
           </TableRow>
         ))}
-        <TableRow>
-          <TableCell>
-            <div className="font-medium">Ciclana de Tal</div>
-            <div className="text-sm text-muted-foreground">
-              ciclana.de.tal@gmail.com
-            </div>
-          </TableCell>
-          <TableCell>
-            <Badge className={`text-xs`} variant="outline">
-              Completo
-            </Badge>
-          </TableCell>
-          <TableCell className="hidden md:table-cell">2023-01-01</TableCell>
-          <TableCell className="text-right">R$500,00</TableCell>
-        </TableRow>
+    
       </TableBody>
     </Table>
   );
