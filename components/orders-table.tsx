@@ -1,3 +1,4 @@
+"use client"
 import {
   Table,
   TableBody,
@@ -7,8 +8,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from './ui/badge';
-import { ChevronsUpDown, Currency, Divide } from 'lucide-react';
+import { ChevronsDown, ChevronsUp, ChevronsUpDown, Currency, Divide } from 'lucide-react';
 import { Order } from '@/lib/types';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const format = new Intl.NumberFormat('pt-br', {
   style: 'currency',
@@ -16,21 +18,55 @@ const format = new Intl.NumberFormat('pt-br', {
 })
 
 export default function OrdersTable({orders}: {orders: Order[]}) {
+
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const { replace } = useRouter()
+  const params = new URLSearchParams(searchParams)
+
+
+  function handleClick(key: string) {
+
+    if(params.get('sort') === key){
+      params.set('sort' , `-${key}`)
+    }else if(params.get('sort') === `-${key}`){
+      params.delete('sort')
+    }else if (key){
+      params.set('sort',key)
+    }
+
+    replace(`${pathname}?${params.toString()}`)
+  }
+
+  function getSortIcon(key: string){
+    if(searchParams.get('sort') === key) {
+      return <ChevronsDown className="w-4" />
+    } else if(searchParams.get('sort') === `-${key}`) {
+      return <ChevronsUp className="w-4" />
+    } 
+
+    return <ChevronsUpDown className="w-4" />
+  }
+
   return (
     <Table>
       <TableHeader>
         <TableRow className="w-full">
           <TableHead className="table-cell">Cliente</TableHead>
           <TableHead className="table-cell">Status</TableHead>
-          <TableHead className=" hidden md:table-cell cursor-pointer justify-end items-center gap-1">
-            <div className="flex items-center gap-1">
-              Data
-              <ChevronsUpDown className="w-4" />
-            </div>
+          <TableHead className=" hidden md:table-cell cursor-pointer 
+          justify-end items-center gap-1" onClick={() => handleClick('order_date')}>
+
+          <div className="flex items-center gap-1">
+              data
+              {getSortIcon('order_date')}
+          </div>
+
           </TableHead>
-          <TableHead className="text-right cursor-pointer flex justify-end items-center gap-1">
+          <TableHead className="text-right cursor-pointer flex 
+          justify-end items-center gap-1" onClick={() => handleClick('amount_in_cents')}>
             Valor
-            <ChevronsUpDown className="w-4" />
+            {getSortIcon('amount_in_cents')}
           </TableHead>
         </TableRow>
       </TableHeader>
