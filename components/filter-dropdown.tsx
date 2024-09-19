@@ -33,6 +33,7 @@ export default function FilterDropdown() {
       }
   
       replace(`${pathname}?${params.toString()}`)
+      setfilterStatus(value)
     }
     return (
       <DropdownMenu>
@@ -43,7 +44,7 @@ export default function FilterDropdown() {
             className="flex gap-2 text-slate-600"
           >
             <Filter className="h-4 w-4" />
-            Status
+            {filterStatus ? filterStatus : 'status'}
           </Button>
         </DropdownMenuTrigger>
   
